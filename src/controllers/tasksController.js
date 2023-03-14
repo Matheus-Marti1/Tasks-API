@@ -1,4 +1,4 @@
-const tasksModel = require("../models/tasksModel");
+import * as tasksModel from '../models/tasksModel';
 
 const getAll = async (_request, res) => {
   const tasks = await tasksModel.getAll();

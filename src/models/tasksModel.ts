@@ -1,4 +1,4 @@
-const connection = require('./connection');
+import connection from './connection';
 
 // Tipagem da model, igual ao banco
 interface TasksModel {
@@ -12,22 +12,22 @@ interface TaskCreateInput {
   title: string;
 }
 
-// Outro jeito de tipar um pouco mais avançado mas bem declarativo
+// Outro jeito de tipar um pouco mais avançado, mas bem declarativo
 type TaskUpdateInput = Omit<TasksModel, 'created_at'>;
 
-const getAll = async (): Promise<TasksModel[]> => {
+export const getAll = async (): Promise<TasksModel[]> => {
   const [tasks] = await connection.execute('SELECT * FROM tasks');
   return tasks;
 };
 
-const getById = async (id: number): Promise<TasksModel> => {
+export const getById = async (id: number): Promise<TasksModel> => {
   const [tasks] = await connection.execute('SELECT * FROM tasks WHERE id = ?', [
     id,
   ]);
   return tasks[0];
 };
 
-const createTask = async (
+export const createTask = async (
   task: TaskCreateInput,
 ): Promise<{ insertId: number }> => {
   const { title } = task;
@@ -43,7 +43,7 @@ const createTask = async (
   return { insertId: createdTask.insertId };
 };
 
-const deleteTask = async (id: number): Promise<TasksModel> => {
+export const deleteTask = async (id: number): Promise<TasksModel> => {
   const [removedTask] = await connection.execute(
     'DELETE FROM tasks WHERE id = ?',
     [id],
@@ -51,7 +51,7 @@ const deleteTask = async (id: number): Promise<TasksModel> => {
   return removedTask;
 };
 
-const updateTask = async (
+export const updateTask = async (
   id: number,
   task: TaskUpdateInput,
 ): Promise<TasksModel> => {
@@ -61,12 +61,4 @@ const updateTask = async (
 
   const [updatedTask] = await connection.execute(query, [title, status, id]);
   return updatedTask;
-};
-
-module.exports = {
-  getAll,
-  getById,
-  createTask,
-  deleteTask,
-  updateTask,
 };

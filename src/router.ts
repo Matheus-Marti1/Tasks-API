@@ -1,8 +1,8 @@
 import { Router } from 'express';
 const router = Router();
 
-const tasksController = require('./controllers/tasksController');
-const tasksMiddleware = require('./middlewares/tasksMiddleware');
+import tasksController from './controllers/tasksController';
+import tasksMiddleware from './middlewares/tasksMiddleware';
 
 router.get('/tasks', tasksController.getAll);
 router.get('/tasks/:id', tasksController.getById);
