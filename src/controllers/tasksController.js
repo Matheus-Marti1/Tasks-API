@@ -1,4 +1,4 @@
-const tasksModel = require('../models/tasksModel');
+const tasksModel = require("../models/tasksModel");
 
 const getAll = async (_request, res) => {
   const tasks = await tasksModel.getAll();
@@ -25,10 +25,10 @@ const deleteTask = async (request, response) => {
 };
 
 const updateTask = async (request, response) => {
-    const { id } = request.params;
+  const { id } = request.params;
 
-    await tasksModel.updateTask(id, request.body);
-    return response.status(204).json();
+  await tasksModel.updateTask(id, request.body);
+  return response.status(204).json();
 };
 
 module.exports = {
