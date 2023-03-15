@@ -1,22 +1,33 @@
 import { Router } from 'express';
 const router = Router();
 
-import tasksController from './controllers/tasksController';
-import tasksMiddleware from './middlewares/tasksMiddleware';
+import * as TasksController from './controllers/tasksController';
+import * as TasksMiddleware from './middlewares/tasksMiddleware';
 
-router.get('/tasks', tasksController.getAll);
-router.get('/tasks/:id', tasksController.getById);
+import { PrismaClient } from '@prisma/client';
+const db = new PrismaClient();
+
+router.get('/tasks', TasksController.getAll);
+router.get('/tasks/:id', TasksController.getById);
 router.post(
   '/tasks',
-  tasksMiddleware.validateFieldTitle,
-  tasksController.createTask,
+  TasksMiddleware.validateFieldTitle,
+  TasksController.createTask,
 );
-router.delete('/tasks/:id', tasksController.deleteTask);
+router.delete('/tasks/:id', TasksController.deleteTask);
 router.put(
   '/tasks/:id',
-  tasksMiddleware.validateFieldTitle,
-  tasksMiddleware.validateFieldStatus,
-  tasksController.updateTask,
+  TasksMiddleware.validateFieldTitle,
+  TasksMiddleware.validateFieldStatus,
+  TasksController.updateTask,
 );
+
+router.post('/pokemon', async (req, res) => {
+  const savedPokemon = await db.pokemon.create({
+    data: req.body,
+  });
+
+  return res.status(201).json(savedPokemon);
+});
 
 export default router;

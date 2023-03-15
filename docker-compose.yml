@@ -10,7 +10,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - narcio-db:/var/lib/mysql
+      - narcio-batata:/var/lib/mysql
 volumes:
   narcio-db:
 

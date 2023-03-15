@@ -1,7 +1,7 @@
 import connection from './connection';
 
 // Tipagem da model, igual ao banco
-interface TasksModel {
+interface TaskModelEntity {
   title: string;
   status: string;
   created_at: Date;
@@ -13,14 +13,16 @@ interface TaskCreateInput {
 }
 
 // Outro jeito de tipar um pouco mais avançado, mas bem declarativo
-type TaskUpdateInput = Omit<TasksModel, 'created_at'>;
+type TaskUpdateInput = Omit<TaskModelEntity, 'created_at'>;
 
-export const getAll = async (): Promise<TasksModel[]> => {
+export const getAll = async (): Promise<TaskModelEntity[]> => {
   const [tasks] = await connection.execute('SELECT * FROM tasks');
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return tasks;
 };
 
-export const getById = async (id: number): Promise<TasksModel> => {
+export const getById = async (id: number): Promise<TaskModelEntity> => {
   const [tasks] = await connection.execute('SELECT * FROM tasks WHERE id = ?', [
     id,
   ]);
@@ -40,25 +42,31 @@ export const createTask = async (
     'pendente',
     dateUTC,
   ]);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return { insertId: createdTask.insertId };
 };
 
-export const deleteTask = async (id: number): Promise<TasksModel> => {
+export const deleteTask = async (id: number): Promise<TaskModelEntity> => {
   const [removedTask] = await connection.execute(
     'DELETE FROM tasks WHERE id = ?',
     [id],
   );
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return removedTask;
 };
 
 export const updateTask = async (
   id: number,
   task: TaskUpdateInput,
-): Promise<TasksModel> => {
+): Promise<TaskModelEntity> => {
   const { title, status } = task;
 
   const query = 'UPDATE tasks SET title = ?, status = ? WHERE id = ?';
 
   const [updatedTask] = await connection.execute(query, [title, status, id]);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return updatedTask;
 };
