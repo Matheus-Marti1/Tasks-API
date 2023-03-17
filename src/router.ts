@@ -5,6 +5,7 @@ import * as TasksController from './controllers/tasksController';
 import * as TasksMiddleware from './middlewares/tasksMiddleware';
 
 import { PrismaClient } from '@prisma/client';
+import { createPokemon, deletePokemon, findAll, findById, updatePokemon } from './controllers/pokemonController';
 const db = new PrismaClient();
 
 router.get('/tasks', TasksController.getAll);
@@ -22,12 +23,10 @@ router.put(
   TasksController.updateTask,
 );
 
-router.post('/pokemon', async (req, res) => {
-  const savedPokemon = await db.pokemon.create({
-    data: req.body,
-  });
-
-  return res.status(201).json(savedPokemon);
-});
+router.get('/pokemon/', findAll)
+router.get('/pokemon/:id', findById)
+router.post('/pokemon/', createPokemon)
+router.delete('/pokemon/:id', deletePokemon)
+router.put('/pokemon/:id', updatePokemon)
 
 export default router;

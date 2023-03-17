@@ -13,7 +13,36 @@ datasource db {
 
 model pokemon {
   id        Int     @id @default(autoincrement())
-  name      String
-  imagem    String?
-  altura    Int
+  name      String  @unique
+  imagem    String? @unique
+  desc      String
+  altura    Float
+  peso      Float
+  genero    String
+  //Habilidades String @relation()
+  Tipo      String
+  Fraquezas String
+  Status    Int
+  tipo pokemon_tipo[]
+}
+
+model Habilidades {
+  id         Int     @id @default(autoincrement())
+  habilidade String
+  descricao  String
+}
+
+model Tipo {
+  id        Int     @id @default(autoincrement())
+  name      String  @default("")
+  Fraquezas String
+  pokemon   pokemon_tipo[]
+}
+
+model pokemon_tipo {
+  pokemon    pokemon     @relation(fields: [pokemonId], references: [id])
+  pokemonId     Int // relation scalar field (used in the `@relation` attribute above)
+  tipo   Tipo @relation(fields: [tipoID], references: [id])
+  tipoID Int // relation scalar field (used in the `@relation` attribute above)
+  @@id([pokemonId, tipoID])
 }
