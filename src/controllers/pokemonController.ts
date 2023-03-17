@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { request, response } from 'express';
 
 const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'],
@@ -7,21 +6,27 @@ const prisma = new PrismaClient({
 
 export const findAll = async (request, response) => {
   const { nome, tipo } = request.query;
-  console.log(tipo);
+
   const pokemon = await prisma.pokemon.findMany({
     where: {
-      name: {
-        contains: nome,
-      },
-      //   tipo: {
-      //     some: {
-      //       tipo: {
-      //         name: {
-      //           contains: tipo,
-      //         },
-      //       },
-      //     },
-      //   },
+      OR: [
+        {
+          name: {
+            contains: nome || '',
+          },
+        },
+        {
+          tipo: {
+            some: {
+              tipo: {
+                name: {
+                  contains: tipo || '',
+                },
+              },
+            },
+          },
+        },
+      ],
     },
     include: {
       tipo: {
@@ -31,6 +36,7 @@ export const findAll = async (request, response) => {
       },
     },
   });
+
   return response.status(200).json(pokemon);
 };
 
@@ -54,20 +60,32 @@ export const findById = async (request, response) => {
 
 export const createPokemon = async (request, response) => {
   try {
-    console.log(request.body);
+    const {
+      name,
+      imagem,
+      desc,
+      altura,
+      peso,
+      genero,
+      Tipo,
+      Fraquezas,
+      Status,
+    } = request.body;
+
     const pokemon = await prisma.pokemon.create({
       data: {
-        name: request.body.name,
-        imagem: request.body.imagem,
-        desc: request.body.desc,
-        altura: request.body.altura,
-        peso: request.body.peso,
-        genero: request.body.genero,
-        Tipo: request.body.Tipo,
-        Fraquezas: request.body.Fraquezas,
-        Status: request.body.Status,
+        name,
+        imagem,
+        desc,
+        altura,
+        peso,
+        genero,
+        Tipo,
+        Fraquezas,
+        Status,
       },
     });
+
     return response.status(201).json(pokemon);
   } catch (err) {
     console.log(err);

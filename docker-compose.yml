@@ -1,6 +1,7 @@
 version: '3.3'
+
 services:
-  db:
+  narcio-mysql-db:
     image: mysql:8.0.32
     environment:
       MYSQL_DATABASE: db
@@ -10,7 +11,8 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - narcio-batata:/var/lib/mysql
+      - ./narcio:/var/lib/mysql
+
 volumes:
   narcio-db:
 
