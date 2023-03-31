@@ -16,13 +16,13 @@ model pokemon {
   name      String  @unique
   imagem    String? @unique
   desc      String
-  altura    Float
-  peso      Float
+  altura    String
+  peso      String
   genero    String
   //Habilidades String @relation()
   Tipo      String
   Fraquezas String
-  Status    Int
+  Status    String
   tipo pokemon_tipo[]
 }
 
